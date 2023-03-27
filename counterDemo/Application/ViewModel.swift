@@ -24,20 +24,22 @@ import RxSwift
 
 /** Notes:  View Model ReatorKit implementation
  1. import ReactorKit
- 2. create three assciated type:
- + Action(enum): is the defined actions from User interaction at View Controller.
- - when receive an action from view -> func mutate() wil be called
- + Mutation(enum): is the defined middle link actions between action and state.
- - it returns as Observable type
- - when func mutate() called -> call func reduce()
- + State(struct): is pre defince result variable that you will need to use to bind to view
- 3. init the initialState variable from protocol Reactor
+ 2. confrom ViewModel from protocol Reactor
+ 3. implement/create three assciated type:
+    + Action(enum): is the defined actions from User interaction at View Controller.
+        - when receive an action from view -> func mutate() wil be called
+    + Mutation(enum): is the defined middle link  between action and state.  there are 2 func:
+        - mutate(): it returns as Observable type. when func mutate() called -> call func reduce().
+        - reduce(): create output state. it called after mutate return Observable<Mutation>.
+    + State(struct): is pre defince result variable that you will need to use to bind to view
+ 4. implement/init the initialState variable from protocol Reactor
  */
 
 class ViewModel: Reactor {
     
     var initialState = State()
     
+    // MARK: - Asociated types
     enum Action {
         case tapIncrease
         case tapClear

@@ -14,19 +14,20 @@ import ReactorKit
 
 /** Notes:  Importance ReactorKit parts in ViewController
  + func bind(reactor: ): executed after you initialize the reactor variable from viewDidLoad or set by outside
+ + reactor = viewModel
  */
 
 /** Notes:  View Controller ReatorKit implementation
  1.  import ReactorKit
  2.  conform to protocol View or StoryboardView
- + implement property disposeBag
- + implement method bind():
- - bind your action from view controller to Action enum in view model
- - bind your state in view model with you view that you want to display
+    + implement property disposeBag
+    + implement method bind():
+        - bind your action from view controller to Action enum in view model
+        - bind your state in view model with you view that you want to display
  3. initialze reactor: can be initialize from viewDidLoad or set by outside
  */
 
-class ViewController: UIViewController, View {
+class ViewController: UIViewController, StoryboardView {
     
     var disposeBag = DisposeBag()
     
@@ -40,9 +41,10 @@ class ViewController: UIViewController, View {
     }
     
     func bind(reactor: ViewModel) {
+        // MARK: - Bind action from vc to vm
         increaseButton.rx
             .tap
-            .map({ViewModel.Action.tapIncrease})
+            .map({Reactor.Action.tapIncrease})
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
@@ -52,6 +54,7 @@ class ViewController: UIViewController, View {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
+        // MARK: - bind state from vm to vc
         reactor.state
             .map({String($0.currentNumber)})
             .bind(to: numberLabel.rx.text)
